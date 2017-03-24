@@ -1,0 +1,7 @@
+  <asmv3:trustInfo>
+    <security>
+        <requestedPrivileges>
+          <requestedExecutionLevel level="[EXLEVEL]" uiAccess="[UIACCESS]" />
+        </requestedPrivileges>
+    </security>
+  </asmv3:trustInfo>

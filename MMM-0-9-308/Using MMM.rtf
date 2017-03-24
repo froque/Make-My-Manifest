@@ -1,0 +1,145 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fmodern\fprq1\fcharset0 Courier New;}{\f2\fnil\fcharset2 Symbol;}}
+{\*\generator Msftedit 5.41.21.2509;}\viewkind4\uc1\pard\qc\b\f0\fs28 Using MMM: Make My Manifest\par
+\b0\fs20 Beta Version 0.12\par
+Bob Riemersma - April 2013\par
+\pard\par
+\par
+\fs22 The online Help is still incomplete and has not been incorporated.  This document may help understand how to use MMM in the interim until more complete reference and tutorial information becomes available.\par
+\par
+\b\fs24 Overview\par
+\b0\fs22\par
+MMM creates an "XCopy deployable" program package from a compiled VB6 EXE project.  It does this by:\par
+\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720 Scanning the VBP file to find the COM/ActiveX dependencies of the program.\par
+{\pntext\f2\'B7\tab}Scanning these compiled DLLs and OCXs for type library information.\par
+{\pntext\f2\'B7\tab}Scanning \i their\i0  Package & Deployment Wizard DEP files for sub-dependencies.\par
+{\pntext\f2\'B7\tab}Scanning \i those\i0  compiled DLLs and OCXs for type library infomation...\par
+{\pntext\f2\'B7\tab}... and so on.\par
+\pard\par
+The result is a folder created within the VB6 project folder that contains a copy of the EXE and all of the DLLs and OCXs needed to run the EXE.  Alongside the EXE in this folder an \i application manifest\i0  is created which will allow these COM libraries to be used \i without being registered first on a target machine.\i0   With this version the manifest can optionally be embedded in the EXE as a resource instead.\par
+\par
+For basic operation then, this folder can simply be copied to a target machine (or carried over via a ZIP file).  It can be run there with no further installation, though it might be good to create a Start Menu shortcut after copying the folder over.\par
+\par
+These are referred to as \i XCopy deployment\i0  packages because there is a folder structure, and the XCOPY command-line utility can copy a folder structure intact.\par
+\par
+\par
+\b\fs24 Target Machine Requirements\b0\fs22\par
+\par
+The basic premise behind this whole process involves \i DLL Isolation\i0  and \i Registration-Free COM\i0 .  This was not supported in Windows until Windows XP, and was not complete and stable until Windows XP SP2.\par
+\par
+It \i is\i0  supported in Windows 2003 Server, but might not have been stable until SP1.  Windows 2003 Server Release 2 should also support the necessary technologies.\par
+\par
+\pard\fi-720\li720 Note:\tab VB controls are not fully supported unless the VB6 SP6 runtimes are installed.  This includes most OCXs made with VB6, and several of the controls that come with VB6, and quite possibly many 3rd party controls.  This is what Microsoft KB 828629 is about and MMM supports this advanced manifest feature, but you \i must\i0  have the SP6 runtime components and XP SP2 or later in place on target machines.  The good news is that many controls will work fine even without these requirements in place.\par
+\par
+\tab Windows XP SP3 now includes the VB6 SP6 runtimes as do Vista, Windows 7, and perhaps even subsequent versions of Windows.\par
+\pard\par
+There are slight differences between Windows XP and Windows 2003 Server support of Reg-Free COM.  Windows Vista is said to have been constructed from the Windows 2003 Server codebase and not the XP codebase, so cautions may apply regarding Vista as well.  The main difference is whether an embedded or a file manifest takes priority when both exist.\par
+\par
+Development and most of the testing of MMM to date has been on Windows XP SP2.  The tests done on Windows Vista have all been successful so far though.\par
+\par
+\i Thus MMM requires that the target machine's OS be Windows XP or later, preferably XP SP2, and there may still be issues on target OSs later than Windows XP.\par
+\i0\par
+\par
+\b\fs24 Development Machine Requirements\b0\fs22\par
+\par
+To use MMM you should ideally be on Windows XP (preferably SP2) or a later version of Windows.  It may make use of features that do not exist in Windows 95, 98, or Me, and I'm distributing it as a reg-free XCopy package so it won't run on Windows 2000.\par
+\par
+You need Visual Basic 6.0 installed in order to use the PDW to create DEP files for any component libraries you've built if you failed to create them beforehand.\par
+\par
+\par
+\b\fs24 Project Requirements\b0\fs22\par
+\par
+A project to be processed by MMM requires several things:\par
+\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720 A project folder that contains all of the project source files, including the VBP file saved after a successful compilation of your project's EXE.\line\par
+{\pntext\f2\'B7\tab}The compiled EXE file \i in\i0  the project folder.  MMM will now try to locate the compiled EXE based on the presence of a Path32 key in the .VBP file.  This should help users who prefer to compile into an alternate folder.\line\par
+{\pntext\f2\'B7\tab}All ActiveX DLLs and OCXs used by your project (including those you have compiled separately earlier) should have a PDW-generated or vendor-provided DEP file.  This DEP file must be in the same folder as the DLL/OCX file.  The component libraries supplied with VB 6.0 should all have DEP files in place, even when they're in System32.\line\par
+{\pntext\f2\'B7\tab}All ActiveX libraries used by your project must be registered on your development machine.  These can be \i anywhere\i0  on your machine as long as it is the registered location.\line\par
+{\pntext\f2\'B7\tab}All standard (non-COM) DLLs referenced in a DEP file (and not in MMM's exclusions list) will be used, and MMM will employ its own \i DLL Search\i0  algorithm to locate these.\line\par
+{\pntext\f2\'B7\tab}Late-bound (i.e. \f1 Set obj = CreateObject("lib.class")\f0 ) ActiveX libraries and standard (\f1 Declare\f0 'd) DLLs not referenced in a DEP file must be manually added to the package's dependencies list via an Add dialog in MMM.\line\par
+{\pntext\f2\'B7\tab}If you use the "XP Styles" manifest option your program must call InitCommonControls() or InitCommonControlsEx() before a form-load causes your program to link to the Common Controls library.  This should be done from Sub Main() in a startup BAS module, prior to loading/showing your main form.\line\par
+{\pntext\f2\'B7\tab}COM libraries to be used should be registered \i per-computer \i0 rather than\i  per-user\i0  if at all possible.  Otherwise MMM may have trouble locating them.\par
+\pard\par
+\fs20\par
+\b\fs22 MMM's DLL Search\b0\fs20\par
+\fs22\par
+MMM uses its own DLL Search algorithm.  In this version it searches folders as follows:\par
+\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720 Same folder as the DEP file and ActiveX DLL/OCX that references it.\par
+{\pntext\f2\'B7\tab}The project's folder.\par
+{\pntext\f2\'B7\tab}The System32 folder.\par
+{\pntext\f2\'B7\tab}The Windows folder.\par
+\pard\par
+The last two paths are found by API calls, allowing these to be wherever they may be in your Windows installation.\par
+\par
+This search is done for any DLL/OCX referenced in a DEP file, whether standard or COM.\par
+\par
+\par
+\b\fs24 Current Limitations\b0\fs22\par
+\par
+These are some that come to mind:\par
+\par
+\b\i No Project Group Support\b0\i0\par
+\par
+\pard\li360 I have plans upgrade MMM to handle VB 6.0 Project Groups as well as Projects.  This would be handy for cases where you have created a Group with an EXE project (or possibly several) and one or more ActiveX OCX and DLL projects.\par
+\par
+Right now you must first compile any ActiveX projects separately, register them, and create a DEP file using the PDW.\par
+\pard\par
+\b\i No ActiveX EXE Support\b0\i0\par
+\par
+\pard\li360 This is a limitation of Reg-Free COM, not MMM.\par
+\pard\par
+\b\i More Complete Library Exclusion List Required\b0\i0\par
+\par
+\pard\li360 Right now the MMM.ini file contains a list of exclusions.  These are based on Microsoft KB articles, the PDW's own exclusion list, and intuition and random advice.\par
+\par
+A major concern I have is with MDAC components.  These seem clumsy to exclude, but should never be deployed under Windows XP or later OSs - with a few possible exceptions related to Jet 3.5 and DAO.  I can't find a definitive answer regarding DAO360.dll.\par
+\pard\par
+\b\i Doesn't Use a Redist Source\b0\i0\par
+\par
+\pard\li360 Right now MMM will build the project's XCopy folder from components at their registered locations whenever possible.  This isn't really a \i best practice\i0  for an installation packager.\par
+\par
+In the future MMM may support a redist folder much as the PDW does.\par
+\pard\par
+\b\i Doesn't Use Persisted MMM Project Settings\b0\i0\par
+\par
+\pard\li360 I've added the ability to save MMM settings for a project in an INI-format file.\par
+\par
+But while running MMM right now, you have to supply a number of settings values for your project, include/exclude detected dependency DLLs/OCXs, etc.  Adding things like manual input of late-bound dependencies and even "additional files" (application INI files, MDB files, images, etc.) to be carried to the XCopy folder makes re-entry of this information each run a pressing concern.\par
+\par
+I save the settings per-project, in a custom file named like:\par
+\par
+\pard\li360\qc <packagefilename>.mmmp\par
+\pard\li360\par
+In future versions when subsequently running MMM against the same project it would pick up these settings for you, allowing you the option of changing them before generating the XCopy package.\par
+\par
+This will also make command-line execution of MMM practical for repeated or automated "build" processes, and could serve as a sort of documentation of your MMM packaging process decisions.  In general it would work a lot like PDW's .PDM files.\par
+\par
+This version still saves the .mmmp file but cannot reload it.\par
+\pard\par
+\par
+\b\fs24 How to run MMM\b0\fs22\par
+\par
+Here is the meat of this writeup.  The other information is useful, but I'll bet you wanted to get to this earlier!\par
+\par
+\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent0{\pntxtb\'B7}}\fi-360\li720 Double-click MMM.exe in an Explorer window.  Or just run MMM from the IDE if you have the MMM.vbp open.\line\par
+{\pntext\f2\'B7\tab}Via menu or toolbar button, open a VBP.  A file open dialog is presented that wants the name of the VBP file for the project to be MMMed.\line\par
+{\pntext\f2\'B7\tab}MMM will begin displaying a log of its scanning activity.  If a serious problem is encountered you'll be notified via a MsgBox or status line message.\line\par
+{\pntext\f2\'B7\tab}Various VBP scanning events may be listed in the Project pane.  If none are fatal the Dependencies pane will be displayed.\line\par
+{\pntext\f2\'B7\tab}If standard DLLs or unregistered component libraries (MMM can't tell which) are found a warning dialog will be presented.\line\par
+{\pntext\f2\'B7\tab}You should examine the list of dependencies presented there, and exclude any you don't want deployed or include anything soft-excluded.  You may wish to cancel at this point.  Right now MMM only hard-excludes anything in MMM.ini's [Exclusions] Section and any TLB or OLB file.\line\par
+{\pntext\f2\'B7\tab}You can now add in non-detected standard (non-COM) DLLs and COM DLLs (such as late-bound "\f1 CreateObject()\f0 " created ones) at this point.\line\par
+{\pntext\f2\'B7\tab}Click on the Next button to advance to the Added files pane.\line\par
+{\pntext\f2\'B7\tab}Here you can add other files to your package, such as INI files or data files in general.  These can be placed in their own subfolders if desired.\line\par
+{\pntext\f2\'B7\tab}Click on the Next button to advance to the Settings pane.\line\par
+{\pntext\f2\'B7\tab}In Settings you can specify the XCopy folder under the VBP's folder and optionally a subfolder for the dependency libraries.\line\par
+{\pntext\f2\'B7\tab}You can choose whether to embed the manifest in the EXE as a resource, and whether to save the MMM log to disk.\line\par
+{\pntext\f2\'B7\tab}You'll also see several checkboxes for options like "Common Controls 6.0" (a.k.a. \i XP Styles\i0 ), "KB 828629 remediation" and one to enable \i trust level\i0  option settings.  Set these as desired.\line\par
+{\pntext\f2\'B7\tab}Click the Next button to proceed to the Make pane.\line\par
+{\pntext\f2\'B7\tab}Click the Finish button to proceed, after you have looked your package settings over by navigating among the previous panes using the menu, toolbar, or Back/Next buttons.\line\par
+{\pntext\f2\'B7\tab}If the XCopy folder already exists for this project, MMM will prompt you asking whether or not to replace it.  If you say no, MMM stops and lets you peruse the Log of its activity until you click the Close button of the Log pane.  If you say yes MMM will clear out the XCopy folder and continue.\line\par
+{\pntext\f2\'B7\tab}If MMM can continue, it will copy the compiled EXE along with each "included" dependency DLL or OCX into the XCopy folder and then generate the project's application manifest and put it into the XCopy folder too (or optionally embed it in the EXE as a resource) .\line\par
+{\pntext\f2\'B7\tab}Here MMM will stop.  You can peruse the Log or just exit MMM.\par
+\pard\par
+}
+ 

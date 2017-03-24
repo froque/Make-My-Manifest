@@ -1,0 +1,378 @@
+Make My Manifest 0.12.308
+Sunday, April 07, 2013 @ 3:25:49 PM
+
+Host OS = Windows 6.00 Service Pack 2 (Build 6002)
+Host = SNITZ
+User = George
+
+Project folder = C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\
+VB project file = MMM.vbp
+
+Project:
+  Name = MMM
+  Company = BVO Computing Services
+  Description = Make My Manifest
+  File description = XCopy Packager for VB 6.0
+  EXE name = MMM.exe
+  EXE path = 
+  Version = 0.12.0.309
+
+Libraries: 6
+
+  stdole2
+    Description = <type library>
+    File location = 
+    Typlib ID = {00020430-0000-0000-C000-000000000046}
+    Version = 0.0
+    Flags = *none*
+    *Excluded*
+
+  msado25
+    Description = <type library>
+    File location = 
+    Typlib ID = {00000205-0000-0010-8000-00AA006D2EA4}
+    Version = 0.0
+    Flags = *none*
+    *Excluded*
+
+  TLI
+    Description = TypeLib Information
+    File location = C:\Windows\system32\TLBINF32.DLL
+    Typlib ID = {8B217740-717D-11CE-AB5B-D41203C10000}
+    Version = 1.0
+    Flags = *none*
+
+    CoClasses: 3
+
+      SearchHelper
+        Description = Helper object for GetMembersWithSubString and multiple TypeLibs
+        Threading model = Apartment
+        CLSID = {8B217752-717D-11CE-AB5B-D41203C10000}
+
+      TypeLibInfo
+        Description = TypeLib information
+        Threading model = Apartment
+        CLSID = {8B217746-717D-11CE-AB5B-D41203C10000}
+
+      TLIApplication
+        Description = TLIApplication object
+        Threading model = Apartment
+        CLSID = {8B21775E-717D-11CE-AB5B-D41203C10000}
+
+  MSComctlLib
+    Description = Microsoft Windows Common Controls 6.0 (SP6)
+    File location = C:\Windows\system32\MSCOMCTL.OCX
+    Typlib ID = {831FDD16-0C5C-11D2-A9FC-0000F8754DA1}
+    Version = 2.1
+    Flags = control
+
+    CoClasses: 32
+
+      DataObject
+        Description = 
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {2334D2B2-713E-11CF-8AE5-00AA00C00905}
+
+      DataObjectFiles
+        Description = 
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {2334D2B4-713E-11CF-8AE5-00AA00C00905}
+
+      TabStrip
+        Description = Microsoft TabStrip Control
+        ProgID = MSComctlLib.TabStrip.2
+        Threading model = Apartment
+        CLSID = {1EFB6596-857C-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  setclientsitefirst"
+
+      Tabs
+        Description = Returns a reference to a collection of Tab objects in the TabStrip control.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {1EFB6598-857C-11D1-B16A-00C0F0283628}
+
+      Tab
+        Description = Returns a reference to a collection of Tab objects in the TabStrip control.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {1EFB659A-857C-11D1-B16A-00C0F0283628}
+
+      Toolbar
+        Description = Microsoft Toolbar Control
+        ProgID = MSComctlLib.Toolbar.2
+        Threading model = Apartment
+        CLSID = {66833FE6-8583-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  actslikelabel,
+                  alignable,
+                  simpleframe,
+                  setclientsitefirst"
+
+      Buttons
+        Description = ToolBar Buttons
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {66833FE8-8583-11D1-B16A-00C0F0283628}
+
+      Button
+        Description = ToolBar Button
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {66833FEA-8583-11D1-B16A-00C0F0283628}
+
+      ButtonMenus
+        Description = ToolBar ButtonMenus
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {66833FEC-8583-11D1-B16A-00C0F0283628}
+
+      ButtonMenu
+        Description = ToolBar ButtonMenu
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {66833FEE-8583-11D1-B16A-00C0F0283628}
+
+      StatusBar
+        Description = Microsoft StatusBar Control
+        ProgID = MSComctlLib.SBarCtrl.2
+        Threading model = Apartment
+        CLSID = {8E3867A3-8586-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  actslikelabel,
+                  alignable,
+                  setclientsitefirst"
+
+      Panels
+        Description = StatusBar Panels collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {8E3867A5-8586-11D1-B16A-00C0F0283628}
+
+      Panel
+        Description = StatusBar Panel
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {8E3867AB-8586-11D1-B16A-00C0F0283628}
+
+      ProgressBar
+        Description = Microsoft ProgressBar Control
+        ProgID = MSComctlLib.ProgCtrl.2
+        Threading model = Apartment
+        CLSID = {35053A22-8589-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  actslikelabel,
+                  alignable,
+                  setclientsitefirst"
+
+      TreeView
+        Description = Displays a hierarchical list of Node objects, each of which consists of a label and an optional bitmap.
+        ProgID = MSComctlLib.TreeCtrl.2
+        Threading model = Apartment
+        CLSID = {C74190B6-8589-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  setclientsitefirst"
+
+      Nodes
+        Description = Treeview Nodes collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {0713E8C0-850A-101B-AFC0-4210102A8DA7}
+
+      Node
+        Description = An object in a TreeView control that can contain images and text.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {C74190B9-8589-11D1-B16A-00C0F0283628}
+
+      ListView
+        Description = Displays a collection of ListItems such as files or folders.
+        ProgID = MSComctlLib.ListViewCtrl.2
+        Threading model = Apartment
+        CLSID = {BDD1F04B-858B-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  setclientsitefirst"
+
+      ListItems
+        Description = ListView Item collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {BDD1F04D-858B-11D1-B16A-00C0F0283628}
+
+      ListItem
+        Description = An item in a ListView control that contains the index of icons associated with it, text, and an array of strings representing subitems that are displayed in Report view.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {BDD1F04F-858B-11D1-B16A-00C0F0283628}
+
+      ColumnHeaders
+        Description = ListView Column Header collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {0713E8C6-850A-101B-AFC0-4210102A8DA7}
+
+      ColumnHeader
+        Description = ListView Column Header
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {BDD1F052-858B-11D1-B16A-00C0F0283628}
+
+      ListSubItems
+        Description = ListView SubItem collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {BDD1F054-858B-11D1-B16A-00C0F0283628}
+
+      ListSubItem
+        Description = ListView SubItem object
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {BDD1F056-858B-11D1-B16A-00C0F0283628}
+
+      ImageList
+        Description = Contains a collection of ListImage objects, each of which can be referred to by its index or key
+        ProgID = MSComctlLib.ImageListCtrl.2
+        Threading model = Apartment
+        CLSID = {2C247F23-8591-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  invisibleatruntime,
+                  alignable,
+                  setclientsitefirst"
+
+      ListImages
+        Description = A bitmap or icon of any size that can be used in other controls.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {2C247F25-8591-11D1-B16A-00C0F0283628}
+
+      ListImage
+        Description = A bitmap or icon of any size that can be used in other controls.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {2C247F27-8591-11D1-B16A-00C0F0283628}
+
+      Slider
+        Description = A calibrated control with a slider for setting or selecting values.
+        ProgID = MSComctlLib.Slider.2
+        Threading model = Apartment
+        CLSID = {F08DF954-8592-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  setclientsitefirst"
+
+      Controls
+        Description = Controls collection
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {C8A3DC01-8593-11D1-B16A-00C0F0283628}
+
+      ComboItem
+        Description = An object that represents an entry in the listbox portion of the combobox control.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {DD9DA661-8594-11D1-B16A-00C0F0283628}
+
+      ComboItems
+        Description = The ComboItems Collection.
+        Threading model = *null*, no ThreadingModel entry will be made in manifest.
+        CLSID = {DD9DA663-8594-11D1-B16A-00C0F0283628}
+
+      ImageCombo
+        Description = Microsoft ImageComboBox Control
+        ProgID = MSComctlLib.ImageComboCtl.2
+        Threading model = Apartment
+        CLSID = {DD9DA666-8594-11D1-B16A-00C0F0283628}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  setclientsitefirst"
+
+  ComCat
+    Description = <Standard or unregistered DLL/OCX>
+    File location = C:\Windows\system32\ComCat.dll
+    Typlib ID = n/a
+    Version = 0.0
+    Flags = *none*
+    *Excluded*
+
+  MSComDlg
+    Description = Microsoft Common Dialog Control 6.0 (SP6)
+    File location = C:\Windows\system32\COMDLG32.OCX
+    Typlib ID = {F9043C88-F6F2-101A-A3C9-08002B2F49FB}
+    Version = 1.2
+    Flags = control
+
+    CoClasses: 1
+
+      CommonDialog
+        Description = Microsoft Common Dialog Control 6.0 (SP6)
+        ProgID = MSComDlg.CommonDialog.1
+        Threading model = Apartment
+        CLSID = {F9043C85-F6F2-101A-A3C9-08002B2F49FB}
+        VB6 KB 828629 remediation:
+          miscStatusIcon = 
+                  "recomposeonresize,
+                  onlyiconic,
+                  cantlinkinside,
+                  insideout,
+                  activatewhenvisible,
+                  invisibleatruntime,
+                  setclientsitefirst"
+
+MMM project settings:
+  Embed manifest in EXE = True
+  Save MMM log to disk = True
+  Common Controls 6.0 manifest node = True
+  VB 6.0 ActiveX control KB 828629 remediation = True
+  DPI Aware manifest node = False
+  Compatibility manifest node = False
+  TrustInfo manifest node = True
+    Execution level = asInvoker
+    UI Access = False
+
+Creating MMM-0-9-308 package folder:
+    C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\MMM-0-9-308
+
+Copying dependencies:
+  C:\Windows\system32\TLBINF32.DLL to MMM-0-9-308\bin
+  C:\Windows\system32\MSCOMCTL.OCX to MMM-0-9-308\bin
+  C:\Windows\system32\COMDLG32.OCX to MMM-0-9-308\bin
+
+Copying EXE:
+  C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\MMM.exe to MMM-0-9-308
+
+Embedding application manifest in:
+  MMM.exe
+
+Copying additional files:
+  C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\MMM.ini to MMM-0-9-308
+  C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\readme.txt to MMM-0-9-308
+  C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\Using MMM.rtf to MMM-0-9-308
+
+Writing MMM package project file:
+  C:\Users\George\Documents\Work Area\VB\MMM\MMM 0-12\MMM-0-9-308.mmmp
+
+Complete!
+

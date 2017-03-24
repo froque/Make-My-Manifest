@@ -1,0 +1,48 @@
+<job>
+  <reference object="Scripting.FileSystemObject"/>
+  <object id="FSO" progId="Scripting.FileSystemObject"/>
+  <script language="VBScript">
+    Dim FolderName, Folder, File, FName, Ext, TSOld, TSNew, Line
+
+    Sub FixFolder(Folder)
+        Dim SubFolder
+
+        For Each File In Folder.Files
+            With File
+                FName = .Name
+                Ext = UCase(Right(FName, 3))
+                Select Case Ext
+                    Case "FRM"
+                        .Name = "temp.frm"
+                        Set TSOld = .OpenAsTextStream(ForReading)
+                        Set TSNew = FSO.CreateTextFile(FName)
+                        With TSOld
+                            Do Until .AtEndOfStream
+                                Line = .ReadLine()
+                                TSNew.WriteLine Replace(Line, "Size            =   9.75", _
+                                                              "Size            =   8.25")
+                            Loop
+                            .Close
+                        End With
+                        TSNew.Close
+                        .Delete
+
+                    Case Else
+                        'Nothing.
+                End Select
+            End With
+        Next
+
+        For Each SubFolder In Folder.SubFolders
+            FixFolder SubFolder
+        Next
+    End Sub
+
+    FolderName = WScript.ScriptFullName
+    FolderName = Left(FolderName, InStrRev(FolderName, "\") - 1)
+    Set Folder = FSO.GetFolder(FolderName)
+
+    FixFolder Folder
+    MsgBox "Done"
+  </script>
+</job>

@@ -1,0 +1,729 @@
+.LOG
+=======================================
+Change Log for "Make My Manifest" (MMM)
+=======================================
+
+NOTE: This is part of the MMM project, so do not remove it!
+
+Dates are given in M/D/Y (US) format below.
+
+
+7:33 PM 10/18/2007 version 0.4.1
+
+* Extensive general rework of logic layout.
+
+* Moved a number of small utility procedures to new modUtils.bas
+  module.
+
+* Added InitCommonControlsEx() call.
+
+* Now formatting text values in the manifest with proper XML
+  Entities to avoid XML syntax errors.
+
+* Going directly to the registry for some properties now.  Some
+  are not available via TLBINF32.dll, others are "unreliable"
+  when a Reg-Free MMM processes its own project file.  Using a
+  trimmed version of Francesco Balena's GetRegistryValue()
+  routine.
+
+* Excluding CoClass entries from the manifest for classes that
+  do not have a ThreadingModel.  These appear to be noncreatable
+  classes, and are not needed or desired in the manifest.
+
+* Producing a more compact manifest file.
+
+* Adding basic Windows Vista "trust" node to the manifest for
+  <requestedExecutionLevel>.
+
+* New option permits saving the MMM log to the package folder
+  as a text file for documentation upon successful completion.
+
+
+6:54 PM 10/19/2007 version 0.5.1
+
+* Added several properties to the LibData class to support a
+  dependency inclusion dialog.
+
+* Added modal Form frmDeps as a dialog for requesting which of
+  the discovered dependencies should be included in the package
+  folder and manifest.
+
+* Permanently exclude any typelibs (.TLB) as well as anything
+  hard-coded in the permanent exclusion list, currently
+  "STDOLE" (which is a typelib anyway).
+
+* Added a reference to ADO 2.5 typelib (should work on any ADO
+  2.5 system or later).  Now using an ADODB.Stream object to
+  write the manifest in UTF-8 format.
+
+
+12:24 AM 10/20/2007 version 0.5.2
+
+* Renamed Form frmDeps to frmSettings.  Assigned a "settings"
+  icon to this Form.
+
+* Added controls and logic to frmSettings to request whether
+  Common Controls 6.0 and Vista Trust nodes should be added to
+  the manifest and to accept settings for the Trust node.
+
+* Generate manifest with conditional nodes as described above.
+
+* Adjusted initial size of Forms in MMM.
+
+
+9:08 PM 10/20/2007 version 0.5.3
+
+* New module modMiscStatus.bas added.  Contains logic to retrieve
+  an XML attributes string for each CoClass to deal with the
+  VB 6.0 ActiveX controls issue described in KB 828629.
+
+* Added properties MiscStatusError and MiscStatusAttributes to
+  the Class ClsData to hold the results of calls to the new
+  logic added above.  These will be gathered in the private
+  LookupRegistration() procedure in Class LibData if the user
+  requests "VB 6.0 KB 828629 remediation" and used in modMain.
+
+* New global g_blnVB6KB828629 added to modMain to facilitate
+  communication among modMain, frmSettings, and LibData.
+
+* New Checkbox chkVB6KB and Command button cmdVB6KBInfo added to
+  frmSettings to capture user preferences regarding this feature.
+
+* Added logic to Class LibData to call GetMiscStatusAttributes()
+  and set the properties MiscStatusError and MiscStatusAttributes
+  for each ClsData CoClass.
+
+* Added [MISCSTATUS] to the CLASS template resource text.
+
+* Added logic to modMain to handle [MISCSTATUS] and any errors
+  signaled by the MiscStatusError property on ClsData items.
+
+* Changed default setting of the optUIAccess group to false (0)
+  and added cmdUIAccessTrueInfo button.
+
+
+4:43 AM 10/30/2007 version 0.5.4 - Working toward DEP processing.
+
+* Changed scanning of PERM_EXCLUDED_LIBS list to allow the list
+  to contain VB LIKE patterns (e.g. "MSVCRT*.DLL").  Now using
+  just the LibFile and not the LibName.
+
+* Added exclusions: MSVCRT*.DLL, MSVCIRT.DLL, MFC*.DLL, SHDOCVW.DLL,
+  RICHED32.DLL, SCRRUN.DLL to the list.
+
+* Imported the IniDOM classes.  Added function IniDOMFromFile() and
+  subroutine IniDOMToFile() to modUtils.
+
+* Got more sophisticated about the exclusion list, especially for
+  the MSVC*.DLLs and MFC*.DLL.
+
+* Using the IniDOM with MMM.ini "preferences" files.  Scanning for
+  exclusions using this source now, section named "[Exclusions]."
+  Old logic retained in modUtil, commented out using double-ticks.
+
+* Added COMCAT.DLL to list of exclusions.
+
+  --NOTE:
+    The "double-ticked" hard coded list (see above) is now out of
+    date!  Only MMM.ini has been updated.
+
+* Added library information for excluded libraries (description,
+  etc. but not class info) to the log.
+
+* Removing the [Exclusions] Section from g_idPrefs when done with it
+  to return memory.  If I ever provide Prefs (MMM.ini) editing
+  within the program this will have to change.
+
+* Double-ticked old Exclusions logic removed.
+
+* Checking for missing MMM.ini and terminating if unavailable.
+
+
+12:31 AM 11/2/2007 version 0.5.5 - We have DEP processing.
+
+* Add Copyright notice.  I still have liberal use terms in there but
+  I'm working too darned hard to give up credit.  A bit more work
+  and this might be a commercial product!
+
+* Catch duplicate occurrences of libraries by Name.  This becomes
+  more important once I begin scanning the DEP files of the EXE
+  project's immediate dependencies.
+
+* Renamed LibData's LoadObject() method to LoadProjFileObject() and
+  LoadReference() to LoadProjFileReference().
+
+* Added support for "Src" column to lvwDeps, to show whether a
+  dependency came from the project file, a DEP file, or was manually
+  added by the user.  This includes a new Source property in the
+  LibData class.
+
+* Changed [Exclusions] Keys to same format as VB6DEP.INI, i.e. we
+  use a Key's Name as our exclusion value/pattern and a null Value.
+  Also UCase$() these as we use them, so that the MMM.ini file
+  can have mixed-case entries w/o a problem when we compare.
+  Also added several more exclusions based on VB6DEP.INI's
+  [Do Not Redistribute] Section.
+
+* Found/fixed bug: If XCopy folder existed but was empty, MMM failed
+  when trying to delete the contents of the folder.
+
+* Added DEP file processing.  Made this recursive.
+
+* Made sure that Included standard DLLs don't get manifest entries
+  but still get copied.
+
+
+5:14 PM 11/5/2007 version 0.5.6
+
+* It turns out that the MinVersion and MajorVersion for component
+  library references in the VBP file are in Hex!  Also, the lib's
+  file location key in the Registry under HKCR\Typelib uses Hex
+  values as in:
+
+  HKCR\Typelib\{0C5672F9-3EDC-4B24-95B5-A6C54C0B79AD}\x.y\0\win32
+
+  Where x and y are Major and Minor in Hex with no leading zeros.
+
+  Class LibData now has a Private Property Get VersionHex() for
+  formatting these keys.
+
+* The logic in modGetReg was flawed.  So much for Senor Francesco
+  Balena!  I thought I could trust him as a "VB expert" rather than
+  rolling my own.  Nope.
+
+  His logic, with or without my hacking, doesn't properly detect
+  the case where a Registry Value name under a Key doesn't exist in
+  the registry!
+
+  GetRegistryValue() now has no default-value parameter.  It also
+  returns a Value string value if present, an empty string value
+  if the Value was empty or the Value under the Key didn't exist,
+  and a vbNullString if the Key didn't exist.
+
+  This required a bit of other rework in LibData and in modMain.
+
+* Found this about manifests and ThreadingModel:
+
+  'The threading model used by in-process COM classes. If this
+  property is null, then no threading model is used. The component
+  is created on the main thread of the client and calls from other
+  threads are marshaled to this thread. Optional. Valid values are:
+  "Apartment", "Free", "Both", and "Neutral".'
+
+  The "If this property is null..." sentence seems to describe how
+  MSDN Library says a VB6 DLL with ThreadingModel Single works.
+
+  Leave the ThreadingModel undescribed?  Declare it as a "" value?
+  Are these equivalent?  I choose to omit ThreadingModel until I
+  find out different.  This seems closest to what I see in the
+  Registry.
+
+* Found that unregistered DLLs or OCXs found in the VBP references
+  threw an exception in TypeLibInfoFromRegistry().  It seems that
+  the same can occur for an unregistered DLL/OCX in a DEP file
+  reference.  Previously we assumed those to be standard DLLs.
+
+  Now either fail on those we find in VBP files, or warn that a
+  "standard DLL" may be an unregistered DLL when found in a DEP
+  file (tell frmSettings via g_blnUnregWarning in modMain).
+
+* Added ability to specify the folder name to use for the XCopy
+  package.  Added ability to specify an optional subfolder name
+  to use for the dependencies.
+
+* When reusing an XCopy folder, clean out subfolder contents and
+  remove the subfolders.
+
+* Added *.OLB to permanently excluded files (these are typelibs).
+
+* Replaced a few String() calls by String$() in several places.
+
+* Chopped MiscStatus() out of modUtils along with some constants,
+  API Defines, and Enums.  These are all in modMiscStatus already
+  and were not even used here!
+
+* Changed Remove method in IniSections and IniKeys from Function
+  to Sub.  No value was ever returned.  Looks like a simple error
+  introduced when these were written.
+
+
+2:31 PM 11/17/2007 version 0.6.0
+
+* Major rewrite to provide a different user interface.  Now MMM
+  is an MDI application with menus and toolbars and the for the
+  first time the "Prometheus" theme has been introduced.  No new
+  functionality has been added, but the "package settings" are
+  being accumulated into an IniDOM in preparation for persisting
+  them to disk for reuse, possibly including command-line runs of
+  MMM.
+
+1:03 PM 11/18/2007 version 0.6.1
+
+* Added an info button in frmSettings that appears when Vista
+  Trust is selected.  Warns about AppCompat bypass vs. installer
+  detection, etc.
+
+* Corrected several small bugs in GetWindowsPath() and
+  GetSystemPath() in modUtils.  GetSystemPath() and
+  GetWindowsPath() are now Public.
+
+* "Add manual ref" by file location now implemented.
+
+* "Remove manual ref" now implemented.
+
+* Reworked handling of hiding Cancel buttons on prior forms/panes.
+  Now disables frmDeps' Add and Remove buttons as well.
+
+* If typelib not found in DLL or OCX check for TLB then OCA.
+
+* "Add manual ref" by ProgID now implemented.
+
+* Eureka!  Discovered that a registry key like:
+
+  HKCR\Typelib\<GUID>\<Major.Minor>\<LCID>\win32 (default)
+
+  ... has the library filelocation of course, but that both the
+  Maj.Min and LCID are Hex values sans leading zeros as in:
+
+  HKCR\Typelib\{...}\6.0\9\win32
+  HKCR\Typelib\{...}\e.1\0\win32
+
+  The LCID level in this Key path had escaped me until now.
+
+* Added OCA to exclusion list (with TLB, etc.) and added OLB to
+  the Typelib search sequence in LookupRegByFileName() of
+  class LibData.
+
+* Broke <TYPELIB> tag of manifest templates out from the FILEHEAD
+  resource to it's own TYPELIB resource.  Now adding a <FILE />
+  node to the manifest for non-COM libraries, hopefully helping
+  with the case where we have a Deps subfolder!  Was this tested?
+
+* Reworked the <FILE> tag in FILEHEAD some more, made some small
+  logic changes in populating and writing it.  For a COM DLL you
+  need one of the form:
+
+    <file name="DepsFolder\my.dll">
+
+  While for a standard DLL you need:
+
+    <file name="my.dll" loadFrom="DepsFolder\my.dll">
+
+  The attribute loadFrom is undocumented but occurs in Microsoft's
+  manifest schema.  Tried the latter form above for both types of
+  DLLs, but it fails for COM DLLs.  The former form however won't
+  find standard DLLs!
+
+  I'm unaware of the "science" behind this, but it works.
+
+5:14 AM 11/23/2007 version 0.6.2
+
+* Added forms frmAddedFiles and frmAddFileDlg to accept additional
+  files to be added to the package.  Now frmAddedFiles has been
+  spliced into the workflow.
+
+* Added new .Flags property to LibData class, capturing this via
+  TLI and including it in the <TYPELIB /> node of a library's
+  manifest entry.  Required a change to the TYPELIB resource as
+  well.
+
+* Additional files now being copied upon a Make (Finish)
+  operation.
+
+* Implemented saving of MMM package project settings file and
+  (optionally) the log upon Make (Finish).  Chopped out the menu
+  and toolbar buttons related to "save" operations.
+
+* Fixed screwy tab order in frmSettings.  PictureBoxes were set
+  as Tabstop = True!
+
+* Ripped out OCA file processing.  While these contain a form of
+  typelib info it is only used by the VB IDE, it isn't part of
+  COM itself.
+
+* Now clearing the .FileName property of Common Dialog controls
+  after use so they don't show in the file name textbox when the
+  control is reused.
+
+* Added time bomb logic.  Set to expire 1-Jun-2008.
+
+* Corrected MISCSTATUS manifestation.  Now only produced when
+  KB 828629 remediation has been requested.
+
+* Changed Cancel logic on all panels to change all Cancel
+  buttons to Exit buttons whenever a Cancel is done.
+
+
+8:09 PM 11/30/2007 version 0.6.3
+
+* New module modEmbed.  New frmSettings option "Embed Manifest."
+  New MMM.ini Section [Manifest] with Key EmbedDefault (Boolean).
+  New .MMMP file Key EmbedManifest (Boolean) in Section
+  [MMMPackage].
+
+  We now optionaly embed the manifest in the project EXE.
+
+* Emergency fix!  frmMain was allowing too small a height on
+  resize operations.
+
+* Fixed minor goof in the frmSettings checkbox list (just
+  positioning).
+
+* Adjusted the layout of frmSettings to be "tighter" allowing
+  frmMain to permit resizing to a smaller height, trying to
+  target 640x480 screen resolutions.  This meant touching nearly
+  every form to adjust the form-bottom buttons in tighter with
+  the border, and to balance things in many cases the control
+  just above the row of buttons was adjusted slightly taller
+  for a better look.
+
+* Slight rewording of warning dialog on the topic of possible
+  unregistered dependencies.  It talked about the scan when
+  this can just as easily occur through a manual addition of a
+  library.  I also suppress repeated warnings on every add now.
+
+* More tweaking of frmSettings to make it fit at 640x480.  Also
+  shrank frmMain down.
+
+* Fixed embarassing error!  When I was looking at DEP files
+  earlier I found that PDW sometimes seems to insert LCID info
+  in the section names of an EXE.  Turns out it does this for
+  OCXs too!  So now we try first without the LCID, then with
+  The User default, then the System default LCID.
+
+
+2:55 PM 12/25/2007 Version 0.6.4 (expires: 1-Dec-2008)
+
+* Changed code in Property Get VersionHex() of LibData class to
+  return LCase$'d results.  Prompted by feedback saying that a
+  typelib COM version of 22.0 (decimal) was failing.
+
+  I doubt this will fix anything though because:
+
+    o I believe I have tested a 14.0 typelib before ("e.0") and
+      it worked fine in uppercase.  Thus even though Registry
+      keys are lowercased I don't think they are case-sensitive
+      when opened via RegOpenKeyEx() in ADVAPI32, and probably
+      not case-sensitive in manifests.
+
+    o Version 22.0 encodes to "16.0" in hex!
+
+  So the correspondent Dale Nottingham is probably correct in
+  saying "double digit" version parts are failing.
+
+* Changed Sub ManifestComponents() in frmMake to use the
+  VersionHex property of LibData instead of Version.  Was this
+  the problem?  Hmm.  I was positive I had tested this.  Had
+  to make VersionHex Public as well.
+
+* Reversed previous change.  Testing with BVOTrans.dll (version
+  14.0) shows that the manifest(s) contain decimal COM version
+  parts, not hex.  Keeping the LCase$() change but it clearly
+  was NOT the issue here.
+
+* Altered DQ() in modUtils to Trim$() the text returned.
+
+* If CompanyName is empty don't use it in creating an APPNAME
+  in the manifest.
+
+* Changed expiration for this version to 1-Dec-2008.
+
+* Trim$() all data entered via Textboxes.  Help avoid Error 75
+  "Path/File error" when creating folders and files based on
+  entered names.
+
+
+7:08 PM 5/3/2008 Version 0.6.5 (expires: 1-Dec-2008)
+
+* Added AppEx class to MMM project.
+
+  Logging timestamp of run now.
+
+  Using AppEx.OSVersion(), AppEx.ComputerName, and
+  AppEx.UserName to log details.
+
+  Using AppEx.Path() to get System and Windows directories now.
+
+  Using AppEx.InitCommonControls in Main() of modMain now.
+
+* Call ExpandEnviromentStrings() in Kernel32 now to process
+  m_FileLocation in LookupRegByTLibInfo of LibData.
+
+  Also for LibFileName in LookupRegByFileName of LibData.
+
+  Same for strFileLocation in frmAddDepDlg.
+
+  Finding additional environment string values beyond
+  %SystemRoot% in user projects.  Possible source of more
+  Error 75 scenarios.
+
+* In LookupRegByTLibInfo in LibData weve gone back to trying
+  .ContainingFile once again, however if the value is no good we
+  then resort to looking in the registry under
+  HKEY_CLASSES_ROOT\Typelib.  If this is still no good we log a
+  failure to resolve the library file name and return a bad
+  result which will exclude the library.
+
+  This is also an attempt to catch more Error 75 occurrences
+  that crop up once we try to copy deps into the deps folder.  I
+  suspect the base problem might be libraries registered per-
+  user!
+
+
+2:30 PM 11/15/2008 Version 0.6.6 (no expiration)
+
+* Removed expiration time bomb logic.
+
+* Added FontWiz class to MMM project.  This required setting
+  the font for most controls back to "MS Sans Serif" in most
+  forms as well as adjusting the font size back down to 8.25 in
+  most cases.
+
+* Fixed "Click for cautions" button in the Project dependencies 
+  panel.  This button would become visible but would not display
+  the cautions dialog when clicked.
+
+* Eliminated splash dialog.  Edited About dialog to eliminate
+  splash functions, expiration notice.  Cleaned up Make panel
+  to reflect other UI changes.
+
+* Put name of VBP being processed into the title bar.
+
+* Updated MMM.ini with additional dependency exclusions for
+  MSXML5.DLL, MSXML6.DLL, FM20.DLL, and IEFRAME.DLL.
+
+* Minor changes to UI text regarding the manifest trustInfo
+  node, to avoid the impression that it only applies to Windows
+  Vista.  This is useful in both Windows 2008 Server and in
+  Windows 7 as well.
+
+* DON'T REQUIRE ADMIN WHEN PACKAGING MMM
+  It doesn't seem to be needed.  Use asInvoker instead.
+
+3:26 PM 12/13/2008
+
+* Fixed typo in InitCommonControls warning dialog.
+
+10:25 PM 3/23/2009
+
+* Another report of trouble that appears to relate to COM
+  versioning.
+
+  To verify, I installed BVOTrans and created a project that
+  uses it.  The VBP contains:
+
+    Type=Exe
+    Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#
+    ->..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+    Reference=*\G{370B6277-C70B-4C87-831F-E138F247640F}#e.0#0#
+    ->..\..\..\..\Windows\System32\BVOTrans.dll#BVO character
+    -> string translation component
+    Form=Form1.frm
+
+  The registry shows a Version value of "14.0"
+
+  So... VBP values are in hex, registry in decimal, and earlier
+  I had concluded the manifest uses decimal.
+
+  Compiling and MMMing yields "14.0" (decimal) and the program
+  works.
+
+  User reports:
+
+    However it fails with message:
+    Unregistered control reference found in project:
+    -> {B79FCF80-3317-11D5-8082-00105AE19B6B}#9.12#0;
+    -> LISTVI~1.OCX
+
+  User provides .REG file showing:
+
+    [HKEY_CLASSES_ROOT\CLSID\{B79FCF82-3317-11D5-8082-
+    ->00105AE19B6B}\VERSION]
+    @="9.12"
+
+  So...
+
+  What to do?  It seems VB sometimes puts hex, sometimes decimal
+  into the VBP file!
+
+
+10:27 AM 6/7/2009 Version 0.6.7
+
+* GUI cleanup.  Eliminated as many of the MDI Child forms'
+  hard-coded dimensional constants as practical.  Added new
+  global constants for positioning the nav buttons in each
+  "panel."  Changes to frmSettings layout required new Resize
+  event dimensions for frmMain.
+
+* Added new Settings option dpiAware.
+
+* Added new Settings option Compatibility.  For now, it is
+  there there or not, and if there we use the ID for Win7.
+
+* Reformatted manifest XML syntax of trustInfo section to get
+  rid of the ms_ prefix on the namespace.
+
+* More aggressive entity encoding of manifest XML attribute
+  values, using &#XHHHH hex for anything outside of &H20 to
+  &H7F.  People had problems with components with odd symbols
+  in Descriptions.
+
+* Take TypeLib version numbers from TLBINF32.DLL-retrieved
+  registry values instead of using the values found in the
+  .VPB file (which were sometimes hex, sometimes decimal).
+  This means we're now always using the registry default
+  version but it also means we can handle versions greater
+  than 9.9, etc.
+
+
+4:59 PM 6/8/2009 Version 0.7
+
+* Stripped more extraneous text from the manifest's trustInfo
+  section via a change in the TEXT/TRUSTINFO resource.
+
+* Took InitCommonControlsEx() out of AppEx class and replaced
+  it by a simple call to InitCommonControls() per MS KB309366.
+
+
+7:26 PM 6/19/2009
+
+* Added MMM version comment to head of the output manifest.
+
+
+7:28 PM 8/11/2009
+
+* Handle bug with international decimal point characters.
+
+
+11:09 AM 8/15/2009  VERSION 0.7.300
+
+* Added capture of the .VBP's "Path32" key's value, uses it
+  to locate the precompiled EXE.
+
+* Minor cosmetic changes to log format.
+
+
+9:21 PM 9/8/2009  VERSION 0.7.301
+
+* Switched from GetFullPathNameW to GetFullPathNameA to allow
+  MMM to run on Win9x without UnicoWS.dll.  Also added API
+  error trapping to ExpandEnv() and GetFullPath() in modUtils.
+
+  The result is more clumsy and inefficient because of the
+  passing and processing of String variables to ByVal String
+  parameters in the Declares, as well as having to backscan
+  and trim trailing "terminating null characters."
+
+
+10:15 AM 9/9/2009  VERSION 0.7.302
+
+* Added check for .VBP's Path32 value starting "\\" or "x:\"
+  (full path, not relative to .VBP folder when EXE is
+  compiled to another drive path) before trying to resolve
+  the full path and detect EXE presence in frmScan.
+
+
+2:11 PM 9/26/2009  VERSION 0.7.303
+
+* The KB921337 "two schema properties" issue was reintroduced
+  along with the <dpiAware> manifest section.  This appears
+  to have been corrected now, but needs more testing on
+  WinXP SP2.
+
+*  Added UPNP.DLL to exclusions in INI.
+
+*  Resolved a question re. exclusion of msscript.ocx (no
+   change made, it will not be hard-excluded by MMM).
+
+
+2:19 PM 3/15/2011  VERSION 0.8.304
+
+*  UIAccess true/false were being localized.  Now only the
+   explicit "true" or "false" are generated in the XML
+   manifest.
+
+*  Non-COM and no DEPS Folder.  When people tell MMM not to
+   use a dependencies folder (always a bad idea - may result
+   in a VB6 program corrupting the target system's registry)
+   non-COM DLLs should not be redirected because they'll
+   appear with no path since they are in the EXE's path.
+   Now MMM will not generate <FILE> entries for such DLLs
+   located "next to" the EXE.
+
+*  The Log panel TextBox now uses BigTextBox semantics
+   making it harder to overflow the Log text.
+
+
+2:05 PM 4/10/2011  VERSION 0.9.305
+
+*  Finally closing in on the problem with "comment" strings
+   in type library info that produces XML syntax errors.
+   Most of the time these appear to be faulty typelibs in
+   poor quality libraries (no names).  One can only wonder
+   how many *serious* bugs are lrking in such shoddy
+   software however.  Maybe the MMM manifest syntax errors
+   should be taken as a warning!
+
+   Such strings are now trimmed at the first NUL, and any
+   character outside &H20 - &H7E is zapped to an "_"
+   (underscore).  It is just too clumsy trying to figure
+   out which accented characters are valid.
+
+
+2:01 AM 10/28/2011  VERSION 0.10.306
+
+*  DPI-Aware manifest fragement revised after persistent
+   complaints that I haven't been looking at the *actual
+   problem* correctly.
+
+   More exhaustive testing showed that not all versions of
+   Windows handle the manifest namespaces the same way.  I
+   should have been more aware of this myself since we've
+   seen similar issues in other parts of the manifest.
+
+   Now using asmv3 for the <windowsSettings/> tag but asmv1
+   for the actual <dpiAware/> tag.  This *appears* to
+   resolve the issue at last.
+
+
+9:51 AM 2/6/2013  VERSION 0.11.307
+
+*  More asmv3 changes to manifest related to the DPI-Aware
+   node.  Changes to 3 manifest fragments:
+
+      manifest.apphead.txt
+      manifest.dpiaware.txt
+      manifest.trustinfo.txt
+
+*  Changed LoadRefByProjFileRef() in LibData.cls module.
+   Actual .TLB files are now handled better and are
+   marked "IncludedNever" and NOT "Included" and generally
+   blocked from accidental or intentional inclusion in
+   the resulting package.
+
+   If you need a TLB at runtime for some reason, copy it
+   into the package yourself as an included file.
+
+
+6:57 PM 4/6/2013  VERSION 0.12.308
+
+*  LookupRegByTLibInfo in LibData.cls now skips any class
+   marked as "hidden."
+
+   This may resolve the problem with control libraries that
+   Microsoft updates and "killbits" leaving the old version
+   registration intact (i.e. multiple, duplicate, obsolete
+   Class ID entries left in the registry).  This was
+   causing MMM to create manifests with multiple entries
+   for the same control, resulting in SxS failures when you
+   tried to run the target program.
+
+*  ManifestComponents in frmMake.frm no longer excludes
+   classes where there is no Threadingmodel since this is a
+   characteristic of many non-creatable classes defined in
+   OCXs and CLSs (example: DataObject in MSCOMCTL.OCX).
+   LogLibrary in frmScan.frm also handles this now to avoid
+   logging the old message.
+
+*  A few new exclusions added to MMM.ini settings file.
+

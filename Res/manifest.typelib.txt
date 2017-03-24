@@ -1,0 +1,1 @@
+    <typelib tlbid="[LIBID]" version="[VERSION]" flags="[FLAGS]" helpdir="" />

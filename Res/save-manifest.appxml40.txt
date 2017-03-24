@@ -1,0 +1,5 @@
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity language="*" name="Microsoft.MSXML2" processorArchitecture="X86" publicKeyToken="4495b64144ccf1df" type="win32" version="4.0.0.0" />
+    </dependentAssembly>
+  </dependency>

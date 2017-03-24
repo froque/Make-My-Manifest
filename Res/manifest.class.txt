@@ -1,0 +1,1 @@
+    <comClass clsid="[CLSID]" tlbid="[LIBID]"[TMODEL][PROGID][MISCSTATUS] description="[DESC]" />
